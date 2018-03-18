@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/myfuncs.h
+
+/home/mudassar/System-Programming/Labs/Lab2/SP_Lab_02/Problem 4/cmakeproc/src/driver.c
+stdio.h
+-
+stdlib.h
+-
+myfuncs.h
+-
+

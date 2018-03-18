@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/myexe.dir/src/driver.c.o  -o myexe  -L"/home/mudassar/System-Programming/Labs/Lab2/SP_Lab_02/Problem 4/cmakeproc/lib" -rdynamic -lmyfuncs -Wl,-Bstatic -lmyfuncs -Wl,-Bdynamic -Wl,-rpath,"/home/mudassar/System-Programming/Labs/Lab2/SP_Lab_02/Problem 4/cmakeproc/lib:" 
