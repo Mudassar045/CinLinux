@@ -14,8 +14,8 @@ int main()
       historysize = getenv("HISTSIZE");
       printf("Changed value of HISTSIZE after getenv: %s\n", historysize);
    
-      setenv("HISTSIZE","300",1);
-      historysize = getenv("HISTSIZE");
+      setenv("HISTSIZE","300",0);
+      historysize= getenv("HISTSIZE");
       printf("Changed value of HISTSIZE after setenv: %s\n", historysize);
       
    return 0;
