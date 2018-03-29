@@ -1,10 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 
-int main(int argc, char **argv) {
-  if (argc > 1) {
+int main(int argc, char **argv)
+{
+  if (argc >= 1)
+  {
     int fd = open(argv[1], O_WRONLY);
-    if(fd == -1) {
+    if(fd == -1)
+    {
       printf("Unable to open the file\n");
       exit(1);
     }
@@ -15,13 +19,18 @@ int main(int argc, char **argv) {
     lock.l_len = 0;
     lock.l_pid = getpid();
 
-    int ret = fcntl(fd, F_SETLKW, &lock);
-    printf("Return value of fcntl:%d\n",ret);
-    if(ret==0)
+    int ret = fcntl(fd, F_SETLK, &lock);
+    if(ret==-1)
     {
-      while (1)
-      {
-      }
+      printf("You can't acquire the lock\n");
+      exit(1);
     }
+    printf("Lock sucessfully acquired\n");
+    while (1){}
+  }
+  else
+  {
+    printf("Missing file name\n");
+    exit(0);
   }
 }

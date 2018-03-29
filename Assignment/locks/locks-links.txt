@@ -1,0 +1,4 @@
+https://www.thegeekstuff.com/2012/04/linux-file-locking-types/
+https://stackoverflow.com/questions/13468238/file-locking-in-linux-using-c-programme
+https://gavv.github.io/blog/file-locks/
+https://books.google.com.pk/books?id=aL3P3eJdiREC&pg=PT84&lpg=PT84&dq=mandatory+and+advisory+lock+programs+in+c&source=bl&ots=SUlwxnrRzm&sig=LS0R3c67Xd5n6jVwqnwaXGu8GTs&hl=en&sa=X&ved=0ahUKEwjAlubE4I_aAhXDDewKHdLCAqkQ6AEIcTAH#v=onepage&q=mandatory%20and%20advisory%20lock%20programs%20in%20c&f=false
