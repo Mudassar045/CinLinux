@@ -5,8 +5,16 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <pwd.h>
+#include <grp.h>
 extern int errno;
 void do_ls(char*);
+void frmtprintf(char*,struct stat);
+void getPermissionChars(char*,int);
+void permCharsAppender(char*,char);
+void getUsernameByUid(char*, int);
+void getGroupNameByGid(char*, int);
+char getFileType(int);
 int main(int argc, char**argv)
 {
     // reading content of pwd/cwd directory
@@ -61,7 +69,9 @@ void do_ls(char* dir)
               perror ("stat");
               exit(rv);
             }
-            printf("%ld   %s\n",statFile.st_size,entry->d_name);
+            // my printf
+            frmtprintf(entry->d_name, statFile);
+
         }
     }
     closedir(dp);
@@ -92,6 +102,105 @@ int isDirectoryHasContent(char* dir)
     {
         return 1;
     }
+}
+void frmtprintf(char *d_name, struct stat statFile)
+{
+  char* userName  = (char*) malloc(sizeof(char)*32);
+  char* groupName = (char*) malloc(sizeof(char)*32);
+  char* permChars = (char*) malloc(sizeof(char)*12);
+  getPermissionChars(permChars,statFile.st_mode);
+  getUsernameByUid(userName,statFile.st_uid);
+  getGroupNameByGid(groupName,statFile.st_gid);
+  printf("%2ld %s %1ld %s %s %5ld %s\n",statFile.st_blocks,permChars,
+  statFile.st_nlink,userName,groupName,statFile.st_size,d_name);
+  free(userName);
+  free(groupName);
+  free(permChars);
+}
+void getPermissionChars(char*permChars, int st_mode)
+{
+  //checking file type
+  permChars[0]=getFileType(st_mode);
+  // user permissions
+  permChars[1]=(char)(st_mode & S_IRUSR) ? '-' : 'r';
+  permChars[2]=(char)(st_mode & S_IWUSR) ? 'w' : '-';
+  permChars[3]=(char)(st_mode & S_IXUSR) ? 'x' : '-';
+  // group permissions
+  permChars[4]=(char)(st_mode & S_IRGRP) ? 'r' : '-';
+  permChars[5]=(char)(st_mode & S_IWGRP) ? 'w' : '-';
+  permChars[6]=(char)(st_mode & S_IXGRP) ? 'x' : '-';
+  // others permissions
+  permChars[7]=(char)(st_mode & S_IROTH) ? 'r' : '-';
+  permChars[8]=(char)(st_mode & S_IWOTH) ? 'w' : '-';
+  permChars[9]=(char)(st_mode & S_IXOTH) ? 'x' : '-';
+}
+void getUsernameByUid(char *userName, int st_uid)
+{
+  errno=0;
+  struct passwd *pw = getpwuid(st_uid);
+  if(pw!=NULL && pw!=0)
+  {
+    strncpy(userName,pw->pw_name,sizeof(pw->pw_name));
+  }
+  else
+  {
+    fprintf(stderr, "Unable to get username\n");
+    exit(errno);
+  }
+}
+void getGroupNameByGid(char* groupName, int st_gid)
+{
+  errno = 0;
+  struct group  *gr = getgrgid(st_gid);
+  if(gr!=NULL && gr!=0)
+  {
+    strncpy(groupName,gr->gr_name,sizeof(gr->gr_name));
+  }
+  else
+  {
+    fprintf(stderr, "Unable to get groupname\n");
+    exit(errno);
+  }
+}
+char getFileType(int st_mode)
+{
+   if(S_ISDIR(st_mode))
+   {
+     return 'd';
+   }
+   else if(S_ISREG(st_mode))
+   {
+     return '-';
+   }
+   else if(S_ISLNK(st_mode))
+   {
+     return 'l';
+   }
+   else if(S_ISCHR(st_mode))
+   {
+     return 'c';
+   }
+   else if(S_ISSOCK(st_mode))
+   {
+     return 's';
+   }
+   else if(S_ISFIFO(st_mode))
+   {
+     return 'p';
+   }
+   else if(S_ISBLK(st_mode))
+   {
+     return 'b';
+   }
+   else
+   {
+     return '?';
+   }
+}
+void permCharsAppender(char* str, char c) {
+  int len = strlen(str);
+  str[len] = c;
+  str[len+1] = '\0';
 }
 /*
 int isOption(char* opt)
