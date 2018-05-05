@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <time.h>
+#include <sys/types.h>
 #include <errno.h>
 #include <pwd.h>
 #include <grp.h>
@@ -11,7 +13,6 @@ extern int errno;
 void do_ls(char*);
 void frmtprintf(char*,struct stat);
 void getPermissionChars(char*,int);
-void permCharsAppender(char*,char);
 void getUsernameByUid(char*, int);
 void getGroupNameByGid(char*, int);
 char getFileType(int);
@@ -105,14 +106,22 @@ int isDirectoryHasContent(char* dir)
 }
 void frmtprintf(char *d_name, struct stat statFile)
 {
+  // date format holder
+  char fileModificationTime[20];
+  //dynamic allocation
   char* userName  = (char*) malloc(sizeof(char)*32);
   char* groupName = (char*) malloc(sizeof(char)*32);
   char* permChars = (char*) malloc(sizeof(char)*12);
+  // file info getters
   getPermissionChars(permChars,statFile.st_mode);
   getUsernameByUid(userName,statFile.st_uid);
   getGroupNameByGid(groupName,statFile.st_gid);
-  printf("%2ld %s %1ld %s %s %5ld %s\n",statFile.st_blocks,permChars,
-  statFile.st_nlink,userName,groupName,statFile.st_size,d_name);
+  // get date format like ls
+  strftime(fileModificationTime, sizeof(fileModificationTime), "%b  %d %H:%M", localtime(&(statFile.st_ctime)));
+  //printing long listing like ls
+  printf("%2ld %s %1ld %s %s %5ld %s %s\n",statFile.st_blocks,permChars,
+  statFile.st_nlink,userName,groupName,statFile.st_size,fileModificationTime,d_name);
+  // deallocating memory
   free(userName);
   free(groupName);
   free(permChars);
@@ -197,17 +206,3 @@ char getFileType(int st_mode)
      return '?';
    }
 }
-void permCharsAppender(char* str, char c) {
-  int len = strlen(str);
-  str[len] = c;
-  str[len+1] = '\0';
-}
-/*
-int isOption(char* opt)
-{
-    opt=="-l"? return 1:return false;
-    opt=="-R"? return 1:return false;
-    opt=="-a"? return 1:return false;
-    opt=="-n"? return 1:return false;
-}
-*/

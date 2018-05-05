@@ -1,0 +1,14 @@
+[unit]
+Description=Time Service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+restartSec=1
+ExecStart=/usr/bin/python /usr/local/bin/mytimeserver.py
+
+[install]
+WantedBy=multi-user.target
+Alias=mytime.service

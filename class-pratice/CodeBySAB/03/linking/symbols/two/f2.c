@@ -1,4 +1,4 @@
-int x = 2345;
+static int x = 2345;
 int func()
 {
 	return 0;

@@ -12,7 +12,7 @@ void myexit(int exitStatus, void *arg){
 }
  
 int main(int argc, char *argv[]){
-	on_exit(myexit, (void *)7);
+	on_exit(myexit, (void *)-1);
 	printf("This is main\n");
 	exit(54);
 }
