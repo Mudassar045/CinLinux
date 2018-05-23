@@ -1,0 +1,6 @@
+include/rmheader.h/
+include/urmheader.h/
+src-utils/
+*.o
+mdrm
+.vscode/
