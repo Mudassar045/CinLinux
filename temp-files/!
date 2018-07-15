@@ -1,0 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+	int s1[]={25};
+	int s[]={3,6,9,12,18};
+	int *p=+s1;
+	p=+s;
+	printf("%d",(int)p[0]);
+}

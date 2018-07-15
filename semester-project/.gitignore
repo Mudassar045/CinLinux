@@ -4,3 +4,4 @@ src-utils/
 *.o
 mdrm
 .vscode/
+.mdrm_temp/
